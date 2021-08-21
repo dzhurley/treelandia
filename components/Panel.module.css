@@ -1,0 +1,10 @@
+.container {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  max-width: 300px;
+
+  padding: 1rem;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+}
