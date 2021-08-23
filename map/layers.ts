@@ -2,25 +2,25 @@ import type MapboxGL from 'mapbox-gl';
 
 export const layers: Record<
   string,
-  {id: string; type: 'fill' | 'circle'; tileset: string}
+  { id: string; type: 'fill' | 'circle'; tileset: string }
 > = {
-  oddParkTrees: {
+  'odd-park-trees': {
     id: 'odd-park-trees',
     type: 'circle',
     tileset: 'mapbox://dzhurley.6hbbsta4',
   },
-  eventParkTrees: {
-    id: 'event-park-trees',
+  'even-park-trees': {
+    id: 'even-park-trees',
     type: 'circle',
     tileset: 'mapbox://dzhurley.do5m10lz',
   },
-  oddStreetTrees: {
+  'odd-street-trees': {
     id: 'odd-street-trees',
     type: 'circle',
     tileset: 'mapbox://dzhurley.c6b9zb5u',
   },
-  eventStreetTrees: {
-    id: 'event-street-trees',
+  'even-street-trees': {
+    id: 'even-street-trees',
     type: 'circle',
     tileset: 'mapbox://dzhurley.cceeczvt',
   },
@@ -43,6 +43,7 @@ export const getLayer = (
       source: {
         type: 'vector',
         url: tileset,
+        promoteId: 'geoid',
       },
       'source-layer': 'data-layer',
       paint: {
@@ -58,6 +59,7 @@ export const getLayer = (
     source: {
       type: 'vector',
       url: tileset,
+      promoteId: 'id',
     },
     'source-layer': 'data-layer',
     paint: {

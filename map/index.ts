@@ -6,7 +6,19 @@ import { layers, getLayer } from './layers';
 
 let map: MapboxGL.Map;
 
-export const initMapbox = () => {
+export const updateLayers = (filters: Record<string, any>): void => {
+  Object.entries(filters).forEach(([name, value]) => {
+    if ('street-trees' === name) {
+      map.setFilter('even-street-trees', value);
+      map.setFilter('odd-street-trees', value);
+    } else if ('park-trees' === name) {
+      map.setFilter('even-park-trees', value);
+      map.setFilter('odd-park-trees', value);
+    }
+  });
+};
+
+export const initMapbox = (onLoad: () => void) => {
   map = new mapboxgl.Map({
     accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string,
     container: 'map',
@@ -21,8 +33,15 @@ export const initMapbox = () => {
     });
 
     map.on('mousemove', (evt) => {
-      const features = map.queryRenderedFeatures(evt.point);
-      console.log(features);
+      const features = map.queryRenderedFeatures(evt.point, {
+        layers: Object.values(layers).map(({ id }) => id),
+      });
+
+      if (features.length) {
+        console.log(features);
+      }
     });
+
+    onLoad();
   });
 };
