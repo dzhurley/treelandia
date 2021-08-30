@@ -4,34 +4,18 @@ import styles from './Filters.module.css';
 
 // fill
 //
-// area: 0.955316
-// asthma: 12.2
-// avg_temp: 86.03292568203199
-// bgpopdense: 4112.775249236902
-// core_m: 25.2
-// core_norm: 0.116886023815919
-// core_w: 26.9
-// geoid: 410510090001
-// healthnorm: 0.646576012742009
-// medhhinc: 46509
-// ment_hlth: 18.5
-// pctpoc: 0.482565538304912
-// pctpov: 0.485177342509264
-// phys_hlth: 17.5
-// tes: 83.33578214246462
-// total_pop: 3929
-// unemplrate: 0.043246129204485
-
-// circle
-//
-// street: true
-// park: false
-// condition: "Fair"
-// date: "2014-09-25T19:17:08Z"
-// id: 56219
-// latin: "Acer palmatum"
-// name: "maple, Japanese"
-// size: "S"
+// asthma 9.1 - 12.9 (percentage)
+// avg_temp 71.29 - 88.26 (on hot summer day)
+// core_norm 0.023033 - 1 (coronary troubles, percentage)
+// healthnorm 0.265219 - 0.706481 (health index)
+// medhhinc 0 - 215,500 (median income)
+// ment_hlth 9.1 - 19.4 (percentage)
+// pctpoc 0.003497 - 0.738916 (percentage)
+// pctpov 0 - 0.893477 (percentage)
+// phys_hlth 7.2 - 21.1 (percentage)
+// tes 44.77 - 100
+// total_pop 516 - 5,335
+// unemplrate 0 - 0.278351 (percentage)
 
 const Filters: React.FC<{
   filters: Record<string, any>;
@@ -46,8 +30,8 @@ const Filters: React.FC<{
 
   return (
     <section className={styles.container}>
-      <h1>Trees</h1>
       <form className={styles.treesForm}>
+        <h1>Trees</h1>
         <label className={styles.label}>
           <input
             className={styles.checkbox}

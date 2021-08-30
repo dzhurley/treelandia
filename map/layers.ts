@@ -1,4 +1,4 @@
-import type MapboxGL from 'mapbox-gl';
+import type { FillLayer, CircleLayer } from 'mapbox-gl';
 
 export const layers: Record<
   string,
@@ -31,11 +31,18 @@ export const layers: Record<
   },
 };
 
+export const interactiveLayers = [
+  'odd-park-trees',
+  'even-park-trees',
+  'odd-street-trees',
+  'even-street-trees',
+];
+
 export const getLayer = (
   id: string,
   type: 'fill' | 'circle',
   tileset: string,
-): MapboxGL.FillLayer | MapboxGL.CircleLayer => {
+): FillLayer | CircleLayer => {
   if (type === 'fill') {
     return {
       id,
@@ -47,7 +54,7 @@ export const getLayer = (
       },
       'source-layer': 'data-layer',
       paint: {
-        'fill-color': 'rgba(0, 255, 0, 0.1)',
+        'fill-color': 'rgba(0, 255, 0, 0.05)',
         'fill-outline-color': 'white',
       },
     };

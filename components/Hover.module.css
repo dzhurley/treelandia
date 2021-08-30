@@ -1,0 +1,22 @@
+.container {
+  position: absolute;
+
+  padding: 0.75rem;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+}
+
+.properties {
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  column-gap: 1rem;
+  row-gap: 0.5rem;
+}
+
+.properties dl,
+.properties dd {
+  padding: 0;
+  margin: 0;
+}

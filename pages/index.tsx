@@ -1,39 +1,23 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback, useReducer, useRef } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
 import Filters from '../components/Filters';
+import Hover from '../components/Hover';
 import Map from '../components/Map';
 
+import { initialState, reducer } from '../reducer';
+
 const Home: NextPage = () => {
-  const [state, dispatch] = useReducer(
-    (
-      state: { filters: Record<string, any> },
-      action: { type: 'updateFilter'; [key: string]: any },
-    ) => {
-      switch (action.type) {
-        case 'updateFilter':
-          return {
-            ...state,
-            filters: {
-              ...state.filters,
-              [action.name]: action.value,
-            },
-          };
-        default:
-          return state;
-      }
-    },
-    {
-      filters: {
-        'street-trees': true,
-        'park-trees': true,
-      },
-    },
-  );
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const mapContainerRef = useRef<HTMLElement>(null);
 
   const updateFilter = useCallback((name, value) => {
     dispatch({ type: 'updateFilter', name, value });
+  }, []);
+
+  const updateHover = useCallback((hovered) => {
+    dispatch({ type: 'updateHover', hovered });
   }, []);
 
   return (
@@ -42,9 +26,15 @@ const Home: NextPage = () => {
         <title>Treelandia</title>
       </Head>
 
-      <Map filters={state.filters} />
+      <Map
+        mapContainerRef={mapContainerRef}
+        filters={state.filters}
+        updateHover={updateHover}
+      />
 
       <Filters filters={state.filters} updateFilter={updateFilter} />
+
+      <Hover mapContainerRef={mapContainerRef} hovered={state.hovered} />
     </>
   );
 };

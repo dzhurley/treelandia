@@ -1,25 +1,48 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 import styles from './Map.module.css';
 
-import { initMapbox, updateLayers } from '../map';
+import {
+  getMapbox,
+  initMapbox,
+  interactiveLayers,
+  MapboxAPI,
+} from '../map';
 
-const Map: React.FC<{ filters: Record<string, any> }> = ({ filters }) => {
-  const [loaded, setLoaded] = useState(false);
+import type { State } from '../reducer';
+
+const Map: React.FC<{
+  mapContainerRef: React.MutableRefObject<HTMLElement | null>,
+  filters: State['filters'];
+  updateHover: (hovered: State['hovered']) => void;
+}> = ({ mapContainerRef, filters, updateHover }) => {
+  useEffect(initMapbox, []);
 
   useEffect(() => {
-    initMapbox(() => {
-      setLoaded(true);
+    getMapbox().then(({ updateLayers }: MapboxAPI) => updateLayers(filters));
+  }, [filters]);
+
+  useEffect(() => {
+    getMapbox().then(({ onEvent }: MapboxAPI) => {
+      onEvent('mousemove', (evt) => {
+        const {
+          point: { x, y },
+          target: map,
+        } = evt;
+        const features = map.queryRenderedFeatures(
+          [
+            [x - 5, y - 5],
+            [x + 5, y + 5],
+          ],
+          { layers: interactiveLayers },
+        );
+
+        updateHover(features?.[0] ?? null);
+      });
     });
-  }, []);
+  }, [updateHover]);
 
-  useEffect(() => {
-    if (loaded) {
-      updateLayers(filters);
-    }
-  }, [filters, loaded]);
-
-  return <section id="map" className={styles.map} />;
+  return <section ref={mapContainerRef} id="map" className={styles.map} />;
 };
 
 export default Map;
