@@ -1,38 +1,82 @@
 import type { MapboxGeoJSONFeature } from 'mapbox-gl';
 
 export type State = {
+  center: [number, number];
   filters: Record<string, any>;
   hovered: MapboxGeoJSONFeature | null;
+  zoom: number;
 };
 
-export const initialState: State = {
+const STATE_KEY = 'treelandia-state';
+
+const initialState: State = {
+  center: [-122.6, 45.5],
   filters: {
     'street-trees': true,
     'park-trees': true,
   },
   hovered: null,
+  zoom: 11,
 };
 
-export type ActionType = 'updateFilter' | 'updateHover';
+const getState = (): State | undefined => {
+  try {
+    const storedState = window?.localStorage?.getItem?.(STATE_KEY);
+    if (storedState) {
+      return JSON.parse(storedState);
+    }
+  } catch (error) {
+    return;
+  }
+};
+
+const setState = (state: State) => {
+  try {
+    window?.localStorage?.setItem?.(STATE_KEY, JSON.stringify(state));
+  } catch (error) {}
+};
+
+export const getInitialState = (): State => {
+  let state = getState();
+  if (!state) {
+    setState(initialState);
+    state = initialState;
+  }
+  return state;
+};
+
+export type ActionType = 'updateFilter' | 'updateHover' | 'updateMap';
 
 export type Action = { type: ActionType; [key: string]: any };
 
 export const reducer = (state: State, action: Action) => {
+  let newState = state;
+
   switch (action.type) {
     case 'updateFilter':
-      return {
+      newState = {
         ...state,
         filters: {
           ...state.filters,
           [action.name]: action.value,
         },
       };
+      break;
     case 'updateHover':
-      return {
+      newState = {
         ...state,
         hovered: action.hovered ?? null,
       };
-    default:
-      return state;
+      break;
+    case 'updateMap':
+      newState = {
+        ...state,
+        center: action.center,
+        zoom: action.zoom,
+      };
+      break;
   }
+
+  setState(newState);
+  return newState;
 };

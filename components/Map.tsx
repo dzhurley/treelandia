@@ -2,21 +2,23 @@ import { useEffect } from 'react';
 
 import styles from './Map.module.css';
 
-import {
-  getMapbox,
-  initMapbox,
-  interactiveLayers,
-  MapboxAPI,
-} from '../map';
+import { getMapbox, initMapbox, interactiveLayers, MapboxAPI } from '../map';
 
 import type { State } from '../reducer';
 
 const Map: React.FC<{
-  mapContainerRef: React.MutableRefObject<HTMLElement | null>,
+  mapContainerRef: React.MutableRefObject<HTMLElement | null>;
   filters: State['filters'];
+  center: State['center'];
+  zoom: State['zoom'];
   updateHover: (hovered: State['hovered']) => void;
-}> = ({ mapContainerRef, filters, updateHover }) => {
-  useEffect(initMapbox, []);
+  updateMap: (
+    center: State['center'],
+    zoom: State['zoom'],
+  ) => void;
+}> = ({ mapContainerRef, filters, center, zoom, updateHover, updateMap }) => {
+  /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  useEffect(() => initMapbox(center, zoom), []);
 
   useEffect(() => {
     getMapbox().then(({ updateLayers }: MapboxAPI) => updateLayers(filters));
@@ -41,6 +43,15 @@ const Map: React.FC<{
       });
     });
   }, [updateHover]);
+
+  useEffect(() => {
+    getMapbox().then(({ onEvent }: MapboxAPI) => {
+      onEvent('idle', ({ target: map }) => {
+        const { lng, lat } = map.getCenter();
+        updateMap([lng, lat], map.getZoom());
+      });
+    });
+  }, [updateMap]);
 
   return <section ref={mapContainerRef} id="map" className={styles.map} />;
 };

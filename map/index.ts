@@ -39,6 +39,12 @@ const api: MapboxAPI = {
       }
     });
 
+    Object.values(layers).forEach(({ id, type, tileset }) => {
+      if (!map.getLayer(id)) {
+        map.addLayer(getLayer(id, type, tileset), 'road-label');
+      }
+    });
+
     map.setFilter('park-trees', ['all', ...parkCriteria]);
 
     const streetFilter = ['all', ...streetCriteria];
@@ -76,18 +82,12 @@ export const getMapbox = async (): Promise<MapboxAPI> => {
   });
 };
 
-export const initMapbox = () => {
+export const initMapbox = (center: [number, number], zoom: number) => {
   map = new mapboxgl.Map({
     accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string,
     container: 'map',
     style: 'mapbox://styles/mapbox/dark-v10',
-    center: [-122.6, 45.5],
-    zoom: 11,
-  });
-
-  map.on('load', () => {
-    Object.values(layers).forEach(({ id, type, tileset }) => {
-      map.addLayer(getLayer(id, type, tileset), 'road-label');
-    });
+    center,
+    zoom,
   });
 };
