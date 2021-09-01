@@ -1,4 +1,4 @@
-import type { Map, MapEventType, MapMouseEvent } from 'mapbox-gl';
+import type { Expression, Map, MapEventType, MapMouseEvent } from 'mapbox-gl';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -10,10 +10,7 @@ let map: Map;
 
 export interface MapboxAPI {
   updateLayers: (filters: Record<string, any>) => void;
-  onEvent: (
-    name: keyof MapEventType,
-    fn: (evt: MapMouseEvent) => void,
-  ) => void;
+  onEvent: (name: keyof MapEventType, fn: (evt: MapMouseEvent) => void) => void;
 }
 
 const listeners: {
@@ -22,15 +19,34 @@ const listeners: {
 
 const api: MapboxAPI = {
   updateLayers: (filters) => {
+    const streetCriteria: Expression[] = [];
+    const parkCriteria: Expression[] = [];
+
     Object.entries(filters).forEach(([name, value]) => {
       if ('street-trees' === name) {
-        map.setFilter('even-street-trees', value);
-        map.setFilter('odd-street-trees', value);
+        streetCriteria.push(value);
       } else if ('park-trees' === name) {
-        map.setFilter('even-park-trees', value);
-        map.setFilter('odd-park-trees', value);
+        parkCriteria.push(value);
+      } else {
+        const sliderFilter: Expression[] = [
+          ['has', name],
+          ['>=', ['get', name], value[0]],
+          ['<=', ['get', name], value[1]],
+        ];
+
+        streetCriteria.push(...sliderFilter);
+        parkCriteria.push(...sliderFilter);
       }
     });
+
+    map.setFilter('park-trees', ['all', ...parkCriteria]);
+
+    const streetFilter = ['all', ...streetCriteria];
+    map.setFilter('street-trees-0', streetFilter);
+    map.setFilter('street-trees-1', streetFilter);
+    map.setFilter('street-trees-2', streetFilter);
+    map.setFilter('street-trees-3', streetFilter);
+    map.setFilter('street-trees-4', streetFilter);
   },
 
   onEvent: (event, listener) => {

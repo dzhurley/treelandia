@@ -15,7 +15,11 @@
   row-gap: 0.5rem;
 }
 
-.properties dl,
+.properties dt {
+  text-align: right;
+}
+
+.properties dt,
 .properties dd {
   padding: 0;
   margin: 0;

@@ -4,38 +4,50 @@ export const layers: Record<
   string,
   { id: string; type: 'fill' | 'circle'; tileset: string }
 > = {
-  'odd-park-trees': {
-    id: 'odd-park-trees',
-    type: 'circle',
-    tileset: 'mapbox://dzhurley.6hbbsta4',
-  },
-  'even-park-trees': {
-    id: 'even-park-trees',
-    type: 'circle',
-    tileset: 'mapbox://dzhurley.do5m10lz',
-  },
-  'odd-street-trees': {
-    id: 'odd-street-trees',
-    type: 'circle',
-    tileset: 'mapbox://dzhurley.c6b9zb5u',
-  },
-  'even-street-trees': {
-    id: 'even-street-trees',
-    type: 'circle',
-    tileset: 'mapbox://dzhurley.cceeczvt',
-  },
   equity: {
     id: 'equity',
     type: 'fill',
-    tileset: 'mapbox://dzhurley.1134azh6',
+    tileset: 'mapbox://dzhurley.9ou30cpk',
+  },
+  'park-trees': {
+    id: 'park-trees',
+    type: 'circle',
+    tileset: 'mapbox://dzhurley.d0i4jfdd',
+  },
+  'street-trees-0': {
+    id: 'street-trees-0',
+    type: 'circle',
+    tileset: 'mapbox://dzhurley.a5969t8n',
+  },
+  'street-trees-1': {
+    id: 'street-trees-1',
+    type: 'circle',
+    tileset: 'mapbox://dzhurley.d68ken52',
+  },
+  'street-trees-2': {
+    id: 'street-trees-2',
+    type: 'circle',
+    tileset: 'mapbox://dzhurley.8w2pien7',
+  },
+  'street-trees-3': {
+    id: 'street-trees-3',
+    type: 'circle',
+    tileset: 'mapbox://dzhurley.3nftwtqk',
+  },
+  'street-trees-4': {
+    id: 'street-trees-4',
+    type: 'circle',
+    tileset: 'mapbox://dzhurley.20qajc2t',
   },
 };
 
 export const interactiveLayers = [
-  'odd-park-trees',
-  'even-park-trees',
-  'odd-street-trees',
-  'even-street-trees',
+  'park-trees',
+  'street-trees-0',
+  'street-trees-1',
+  'street-trees-2',
+  'street-trees-3',
+  'street-trees-4',
 ];
 
 export const getLayer = (
@@ -54,7 +66,7 @@ export const getLayer = (
       },
       'source-layer': 'data-layer',
       paint: {
-        'fill-color': 'rgba(0, 255, 0, 0.05)',
+        'fill-color': 'rgba(0, 0, 0, 0)',
         'fill-outline-color': 'white',
       },
     };

@@ -2,25 +2,38 @@
   position: absolute;
   top: 1rem;
   left: 1rem;
-  max-width: 300px;
+  width: 200px;
 
   padding: 1rem;
   border-radius: 5px;
   background-color: #f0f0f0;
 }
 
-.treesForm {
-  display: flex;
-  flex-direction: column;
+.container h3 {
+  margin: 1rem 0;
+}
+
+.container h3:first-of-type {
+  margin-top: 0.5rem;
 }
 
 .label {
   padding: 0.25rem 0;
-  display: block;
+  margin: 0 1rem;
   cursor: pointer;
 }
 
 .checkbox {
   margin-right: 0.5rem;
   cursor: pointer;
+}
+
+.slider {
+  display: block;
+  padding-bottom: 1.5rem;
+  text-align: center;
+}
+
+.slider:last-of-type {
+  padding-bottom: 0;
 }

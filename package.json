@@ -3,17 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "tileset": "ts-node makeTilesets.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@turf/boolean-point-in-polygon": "6.5.0",
+    "@turf/helpers": "6.5.0",
+    "@types/lodash": "4.14.172",
     "@types/mapbox-gl": "2.4.0",
+    "lodash": "4.17.21",
     "mapbox-gl": "2.4.1",
     "next": "11.1.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-range": "1.8.11",
+    "ts-node": "10.2.1"
   },
   "devDependencies": {
     "@types/react": "17.0.19",
