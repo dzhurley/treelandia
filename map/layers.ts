@@ -2,7 +2,7 @@ import type { FillLayer, CircleLayer } from 'mapbox-gl';
 
 export const layers: Record<
   string,
-  { id: string; type: 'fill' | 'circle'; tileset: string }
+  { id: string; type: 'fill' | 'circle'; tileset?: string }
 > = {
   equity: {
     id: 'equity',
@@ -39,6 +39,14 @@ export const layers: Record<
     type: 'circle',
     tileset: 'mapbox://dzhurley.20qajc2t',
   },
+  hovered: {
+    id: 'hovered',
+    type: 'circle',
+  },
+  selected: {
+    id: 'selected',
+    type: 'circle',
+  },
 };
 
 export const interactiveLayers = [
@@ -54,7 +62,7 @@ export const interactiveLayers = [
 export const getLayer = (
   id: string,
   type: 'fill' | 'circle',
-  tileset: string,
+  tileset?: string,
 ): FillLayer | CircleLayer => {
   if (type === 'fill') {
     return {
@@ -69,6 +77,23 @@ export const getLayer = (
       paint: {
         'fill-color': 'rgba(0, 0, 0, 0)',
         'fill-outline-color': 'white',
+      },
+    };
+  }
+
+  if (id === 'hovered' || id === 'selected') {
+    return {
+      id,
+      type,
+      source: {
+        type: 'geojson',
+        data: { type: 'FeatureCollection', features: [] },
+      },
+      paint: {
+        'circle-color': 'green',
+        'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 1, 20, 8],
+        'circle-stroke-color': 'white',
+        'circle-stroke-width': id === 'selected' ? 8 : 4,
       },
     };
   }

@@ -41,7 +41,11 @@ const api: MapboxAPI = {
 
     Object.values(layers).forEach(({ id, type, tileset }) => {
       if (!map.getLayer(id)) {
-        map.addLayer(getLayer(id, type, tileset), 'road-label');
+        if (tileset) {
+          map.addLayer(getLayer(id, type, tileset), 'road-label');
+        } else {
+          map.addLayer(getLayer(id, type));
+        }
       }
     });
 

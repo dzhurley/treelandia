@@ -4,7 +4,7 @@ import { spawnSync } from 'child_process';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import type { Feature, FeatureCollection, Properties } from '@turf/helpers';
 
-import { BLOCK_PROPS } from './utils';
+import { BLOCK_PROPS, Prop } from './utils';
 
 const makeTileset = (target: string, source: string) => {
   const tileset = path.join(__dirname, `data/${target}.mbtiles`);
@@ -32,7 +32,7 @@ const parseEquity = (data: FeatureCollection): FeatureCollection => {
     if (block.properties?.incorpname === 'Portland') {
       const properties = Object.entries(block.properties).reduce(
         (properties, [property, value]) => {
-          if (ALLOWED_PROPS.includes(property)) {
+          if (ALLOWED_PROPS.includes(property as Prop)) {
             properties[property] = value;
           }
           return properties;
