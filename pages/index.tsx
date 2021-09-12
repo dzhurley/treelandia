@@ -49,7 +49,11 @@ const Home: NextPage = () => {
 
       <Filters filters={state.filters} updateFilter={updateFilter} />
 
-      <Selected tree={state.selected.tree} block={state.selected.block} />
+      <Selected
+        tree={state.selected.tree}
+        block={state.selected.block}
+        filters={state.filters}
+      />
 
       <Hover mapContainerRef={mapContainerRef} hovered={state.hovered} />
     </>

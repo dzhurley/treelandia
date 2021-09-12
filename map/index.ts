@@ -12,6 +12,7 @@ let map: Map;
 
 export interface MapboxAPI {
   updateLayers: (filters: Record<string, any>) => void;
+  setSelectedFiltered: (visible: boolean) => void;
   onEvent: (name: keyof MapEventType, fn: (evt: MapMouseEvent) => void) => void;
 }
 
@@ -59,6 +60,16 @@ const api: MapboxAPI = {
     map.setFilter('street-trees-2', streetFilter);
     map.setFilter('street-trees-3', streetFilter);
     map.setFilter('street-trees-4', streetFilter);
+  },
+
+  setSelectedFiltered: (visible) => {
+    if (visible) {
+      map.setPaintProperty('selected', 'circle-stroke-color', 'white');
+      map.setPaintProperty('selected', 'circle-color', 'green');
+    } else {
+      map.setPaintProperty('selected', 'circle-stroke-color', 'gray');
+      map.setPaintProperty('selected', 'circle-color', 'rgba(0, 0, 0, 0)');
+    }
   },
 
   onEvent: (event, listener) => {
