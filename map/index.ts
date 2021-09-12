@@ -1,10 +1,16 @@
-import type { Expression, Map, MapEventType, MapMouseEvent } from 'mapbox-gl';
+import type {
+  Expression,
+  GeoJSONSource,
+  Map,
+  MapEventType,
+  MapMouseEvent,
+} from 'mapbox-gl';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 import type { State } from '../reducer';
 
-import { layers, getLayer } from './layers';
+import { interactiveLayers, layers, getLayer } from './layers';
 
 export * from './layers';
 
@@ -13,8 +19,127 @@ let map: Map;
 export interface MapboxAPI {
   updateLayers: (filters: Record<string, any>) => void;
   setSelectedFiltered: (visible: boolean) => void;
-  onEvent: (name: keyof MapEventType, fn: (evt: MapMouseEvent) => void) => void;
+  onEvent: (name: keyof MapEventType, ...deps: any) => void;
 }
+
+const handlers: {
+  [key in keyof MapEventType]?: (
+    ...deps: any[]
+  ) => (evt: MapMouseEvent) => void;
+} = {
+  mousemove: (updateHover: (hovered: State['hovered']) => void) => {
+    let hoveredFeature: State['hovered'] = null;
+
+    return (evt) => {
+      const {
+        point: { x, y },
+        target: map,
+      } = evt;
+      const features = map.queryRenderedFeatures(
+        [
+          [x - 5, y - 5],
+          [x + 5, y + 5],
+        ],
+        { layers: interactiveLayers },
+      );
+
+      const source = map.getSource('hovered') as GeoJSONSource;
+      let newHovered: State['hovered'] = null;
+
+      features.forEach((feature) => {
+        if (feature.layer.id !== 'equity') {
+          newHovered = feature;
+        }
+      });
+
+      if (!newHovered) {
+        updateHover(null);
+        if (hoveredFeature?.id) {
+          source.setData({ type: 'FeatureCollection', features: [] });
+        }
+        hoveredFeature = null;
+        return;
+      }
+
+      // @ts-ignore
+      if (hoveredFeature && newHovered.id === hoveredFeature.id) {
+        return;
+      }
+
+      hoveredFeature = newHovered;
+
+      source.setData(newHovered);
+
+      updateHover(newHovered);
+    };
+  },
+
+  click: (
+    selected: State['selected']['tree'],
+    updateSelected: (selected: State['selected']) => void,
+  ) => {
+    let selectedFeature: State['selected']['tree'] = selected;
+
+    return (evt) => {
+      const {
+        point: { x, y },
+        target: map,
+      } = evt;
+      const features = map.queryRenderedFeatures(
+        [
+          [x - 5, y - 5],
+          [x + 5, y + 5],
+        ],
+        { layers: interactiveLayers },
+      );
+
+      const newSelected: State['selected'] = {
+        tree: null,
+        block: null,
+      };
+
+      features.forEach((feature) => {
+        if (!newSelected.tree && feature.layer.id !== 'equity') {
+          newSelected.tree = feature;
+        }
+        if (!newSelected.block && feature.layer.id === 'equity') {
+          newSelected.block = feature;
+        }
+      });
+
+      const source = map.getSource('selected') as GeoJSONSource;
+
+      if (!newSelected.tree) {
+        updateSelected(newSelected);
+        if (selectedFeature?.id) {
+          source.setData({ type: 'FeatureCollection', features: [] });
+        }
+        selectedFeature = null;
+        return;
+      }
+
+      if (selectedFeature) {
+        if (newSelected.tree.id === selectedFeature.id) {
+          return;
+        }
+        source.setData({ type: 'FeatureCollection', features: [] });
+      }
+
+      selectedFeature = newSelected.tree;
+
+      source.setData(newSelected.tree);
+
+      updateSelected(newSelected);
+    };
+  },
+
+  idle:
+    (updateMap: (center: State['center'], zoom: State['zoom']) => void) =>
+    (evt) => {
+      const { lng, lat } = evt.target.getCenter();
+      updateMap([lng, lat], evt.target.getZoom());
+    },
+};
 
 const listeners: {
   [key in keyof MapEventType]?: (evt: MapMouseEvent) => void;
@@ -72,14 +197,18 @@ const api: MapboxAPI = {
     }
   },
 
-  onEvent: (event, listener) => {
+  onEvent: (event, ...deps) => {
     const existing = listeners[event];
     if (existing) {
       map.off(event, existing);
       delete listeners[event];
     }
-    listeners[event] = listener;
-    map.on(event, listener);
+
+    const listener = handlers[event]?.(...deps);
+    if (listener) {
+      listeners[event] = listener;
+      map.on(event, listener);
+    }
   },
 };
 
