@@ -1,0 +1,57 @@
+.container {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 300px;
+
+  padding: 1rem;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 10px 1px
+}
+
+.container h3 {
+  margin: 1rem 0;
+}
+
+.container h3:first-of-type {
+  margin-top: 0.5rem;
+}
+
+.properties {
+  margin: 0;
+  padding: 0;
+}
+
+.properties span {
+  display: flex;
+  margin: 0.5rem 0;
+}
+
+.properties span:last-of-type {
+  margin: 0;
+}
+
+.properties dt,
+.properties dd {
+  padding: 0;
+  margin: 0;
+}
+
+.properties dt {
+  order: 1;
+}
+
+.properties dd {
+  order: 3;
+}
+
+.properties span:after {
+  border-bottom: 1px dotted black;
+  content: '';
+  display: inline;
+  flex-grow: 1;
+  order: 2;
+  margin: 0 0.25rem;
+}

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { State } from '../reducer';
+import { PROPS, TREE_PROPS } from '../utils';
 
 import styles from './Hover.module.css';
 
@@ -53,20 +54,16 @@ const Hover: React.FC<{
       className={styles.container}
     >
       <dl className={styles.properties}>
-        <dt>Name:</dt>
-        <dd>{properties.name}</dd>
-
-        <dt>Latin:</dt>
-        <dd>{properties.latin}</dd>
-
-        <dt>Size:</dt>
-        <dd>{properties.size}</dd>
-
-        <dt>Condition:</dt>
-        <dd>{properties.condition}</dd>
-
-        <dt>Date:</dt>
-        <dd>{new Date(properties.date).toLocaleDateString()}</dd>
+        {TREE_PROPS.map((prop) => (
+          <>
+            <dt>{PROPS[prop]}:</dt>
+            <dd>
+              {prop === 'date'
+                ? new Date(properties.date).toLocaleDateString()
+                : properties[prop]}
+            </dd>
+          </>
+        ))}
       </dl>
     </section>
   );

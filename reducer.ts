@@ -4,6 +4,10 @@ export type State = {
   center: [number, number];
   filters: Record<string, any>;
   hovered: MapboxGeoJSONFeature | null;
+  selected: {
+    tree: MapboxGeoJSONFeature | null;
+    block: MapboxGeoJSONFeature | null;
+  };
   zoom: number;
 };
 
@@ -16,6 +20,10 @@ const initialState: State = {
     'park-trees': true,
   },
   hovered: null,
+  selected: {
+    tree: null,
+    block: null,
+  },
   zoom: 11,
 };
 
@@ -45,7 +53,11 @@ export const getInitialState = (): State => {
   return state;
 };
 
-export type ActionType = 'updateFilter' | 'updateHover' | 'updateMap';
+export type ActionType =
+  | 'updateFilter'
+  | 'updateHover'
+  | 'updateMap'
+  | 'updateSelected';
 
 export type Action = { type: ActionType; [key: string]: any };
 
@@ -73,6 +85,12 @@ export const reducer = (state: State, action: Action) => {
         ...state,
         center: action.center,
         zoom: action.zoom,
+      };
+      break;
+    case 'updateSelected':
+      newState = {
+        ...state,
+        selected: action.selected,
       };
       break;
   }

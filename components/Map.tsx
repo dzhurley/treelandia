@@ -12,11 +12,17 @@ const Map: React.FC<{
   center: State['center'];
   zoom: State['zoom'];
   updateHover: (hovered: State['hovered']) => void;
-  updateMap: (
-    center: State['center'],
-    zoom: State['zoom'],
-  ) => void;
-}> = ({ mapContainerRef, filters, center, zoom, updateHover, updateMap }) => {
+  updateMap: (center: State['center'], zoom: State['zoom']) => void;
+  updateSelected: (selected: State['selected']) => void;
+}> = ({
+  mapContainerRef,
+  filters,
+  center,
+  zoom,
+  updateHover,
+  updateMap,
+  updateSelected,
+}) => {
   /* eslint-disable-next-line react-hooks/exhaustive-deps */
   useEffect(() => initMapbox(center, zoom), []);
 
@@ -39,10 +45,52 @@ const Map: React.FC<{
           { layers: interactiveLayers },
         );
 
-        updateHover(features?.[0] ?? null);
+        let newHovered: State['hovered'] = null;
+
+        features.forEach((feature) => {
+          if (!newHovered && feature.layer.id !== 'equity') {
+            newHovered = feature;
+          }
+        });
+
+        updateHover(newHovered);
       });
     });
   }, [updateHover]);
+
+  useEffect(() => {
+    getMapbox().then(({ onEvent }: MapboxAPI) => {
+      onEvent('click', (evt) => {
+        const {
+          point: { x, y },
+          target: map,
+        } = evt;
+        const features = map.queryRenderedFeatures(
+          [
+            [x - 2, y - 2],
+            [x + 2, y + 2],
+          ],
+          { layers: interactiveLayers },
+        );
+
+        const newSelected: State['selected'] = {
+          tree: null,
+          block: null,
+        };
+
+        features.forEach((feature) => {
+          if (!newSelected.tree && feature.layer.id !== 'equity') {
+            newSelected.tree = feature;
+          }
+          if (!newSelected.block && feature.layer.id === 'equity') {
+            newSelected.block = feature;
+          }
+        });
+
+        updateSelected(newSelected);
+      });
+    });
+  }, [updateSelected]);
 
   useEffect(() => {
     getMapbox().then(({ onEvent }: MapboxAPI) => {

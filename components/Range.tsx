@@ -2,17 +2,18 @@ import { useCallback, useState } from 'react';
 import { Range as ReactRange, getTrackBackground } from 'react-range';
 import { debounce } from 'lodash';
 
+import { Prop, PROPS } from '../utils';
+
 import styles from './Range.module.css';
 
 const Range: React.FC<{
-  label: string;
+  name: Prop;
   min: number;
   max: number;
   step: number;
   value: number[] | null;
   onChange: (values: number[]) => void;
-  units?: string;
-}> = ({ label, min, max, step, value, onChange, units }) => {
+}> = ({ name, min, max, step, value, onChange }) => {
   const [values, setValues] = useState(value ?? [min, max]);
 
   /* eslint-disable-next-line react-hooks/exhaustive-deps */
@@ -20,7 +21,7 @@ const Range: React.FC<{
 
   return (
     <label className={styles.range}>
-      {label}
+      {PROPS[name]}
       <ReactRange
         draggableTrack
         step={step}
@@ -65,7 +66,6 @@ const Range: React.FC<{
         {step < 1
           ? `${values[0].toFixed(1)} - ${values[1].toFixed(1)}`
           : `${values[0]} - ${values[1]}`}{' '}
-        {units ? `(${units})` : ''}
       </output>
     </label>
   );

@@ -48,6 +48,7 @@ export const interactiveLayers = [
   'street-trees-2',
   'street-trees-3',
   'street-trees-4',
+  'equity',
 ];
 
 export const getLayer = (

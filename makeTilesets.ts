@@ -4,6 +4,8 @@ import { spawnSync } from 'child_process';
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 import type { Feature, FeatureCollection, Properties } from '@turf/helpers';
 
+import { BLOCK_PROPS } from './utils';
+
 const makeTileset = (target: string, source: string) => {
   const tileset = path.join(__dirname, `data/${target}.mbtiles`);
   console.log(`writing ${target} tileset`);
@@ -23,49 +25,14 @@ const makeTreeTilesets = (prefix: string, collections: FeatureCollection[]) => {
   });
 };
 
-const ALLOWED_EQUITY_PROPS = [
-  // the blockgroup id
-  'geoid',
-  // the total population of the block group
-  'total_pop',
-  // the percent of people in poverty inside the blockgroup
-  'pctpov',
-  // the percent of people of color inside the block group
-  'pctpoc',
-  // the unemployment rate inside of the block group
-  'unemplrate',
-  // the median household income of the block group
-  'medhhinc',
-  // the area of the blockgroup in square kilometers
-  'area',
-  // the average temperature of the blockgroup on a hot summer's day
-  'avg_temp',
-  // the density of the blockgroup (total population over area)
-  'bgpopdense',
-  // the self reported physical health challenges of the people in the block group (a percentage)
-  'phys_hlth',
-  //  the self reported mental health challenges of people in the block group (a percentage)
-  'ment_hlth',
-  // the self reported asthma challenges of people in the block group (a percentage)
-  'asthma',
-  // the self reported male coronary heart challenges of people in the block group (a percentage)
-  'core_m',
-  // the self reported female coronary heart challenges of people in the block group (a percentage)
-  'core_w',
-  // the normalized total coronary challenges of people in the block group
-  'core_norm',
-  // the normalized health index of the block group
-  'healthnorm',
-  // the tree equity score of the block group
-  'tes',
-];
+const ALLOWED_PROPS = BLOCK_PROPS.concat('geoid');
 
 const parseEquity = (data: FeatureCollection): FeatureCollection => {
   const features = data.features.reduce((blocks: Feature[], block: Feature) => {
     if (block.properties?.incorpname === 'Portland') {
       const properties = Object.entries(block.properties).reduce(
         (properties, [property, value]) => {
-          if (ALLOWED_EQUITY_PROPS.includes(property)) {
+          if (ALLOWED_PROPS.includes(property)) {
             properties[property] = value;
           }
           return properties;

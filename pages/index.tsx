@@ -5,6 +5,7 @@ import Head from 'next/head';
 import Filters from '../components/Filters';
 import Hover from '../components/Hover';
 import Map from '../components/Map';
+import Selected from '../components/Selected';
 
 import { getInitialState, reducer } from '../reducer';
 
@@ -25,6 +26,10 @@ const Home: NextPage = () => {
     dispatch({ type: 'updateMap', center, zoom });
   }, []);
 
+  const updateSelected = useCallback((selected) => {
+    dispatch({ type: 'updateSelected', selected });
+  }, []);
+
   return (
     <>
       <Head>
@@ -38,9 +43,12 @@ const Home: NextPage = () => {
         zoom={state.zoom}
         updateHover={updateHover}
         updateMap={updateMap}
+        updateSelected={updateSelected}
       />
 
       <Filters filters={state.filters} updateFilter={updateFilter} />
+
+      <Selected tree={state.selected.tree} block={state.selected.block} />
 
       <Hover mapContainerRef={mapContainerRef} hovered={state.hovered} />
     </>

@@ -53,57 +53,52 @@ const Filters: React.FC<{
       <h3>Equity</h3>
 
       <Range
-        label="Asthma"
+        name="asthma"
         min={5}
         max={20}
         step={0.1}
         value={filters.asthma}
         onChange={handleRange('asthma')}
-        units="%"
       />
 
       <Range
-        label="Average Temperature"
+        name="avg_temp"
         min={50}
         max={100}
         step={0.1}
         value={filters.avg_temp}
         onChange={handleRange('avg_temp')}
-        units="degrees"
       />
 
       <Range
-        label="Median Household Income"
+        name="medhhinc"
         min={0}
         max={250000}
         step={1000}
         value={filters.medhhinc}
         onChange={handleRange('medhhinc')}
-        units="$"
       />
 
       <Range
-        label="Mental Health Issues"
+        name="ment_hlth"
         min={5}
         max={25}
         step={0.1}
         value={filters.ment_hlth}
         onChange={handleRange('ment_hlth')}
-        units="%"
       />
 
       <Range
-        label="Physical Health Issues"
+        name="phys_hlth"
         min={5}
         max={25}
         step={0.1}
         value={filters.phys_hlth}
         onChange={handleRange('phys_hlth')}
-        units="%"
       />
 
       <Range
-        label="Population"
+        name="total_pop"
         min={500}
         max={5500}
         step={100}
@@ -112,7 +107,7 @@ const Filters: React.FC<{
       />
 
       <Range
-        label="Tree Equity Score"
+        name="tes"
         min={30}
         max={100}
         step={0.1}
