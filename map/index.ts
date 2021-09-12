@@ -2,6 +2,8 @@ import type { Expression, Map, MapEventType, MapMouseEvent } from 'mapbox-gl';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
+import type { State } from '../reducer';
+
 import { layers, getLayer } from './layers';
 
 export * from './layers';
@@ -86,12 +88,27 @@ export const getMapbox = async (): Promise<MapboxAPI> => {
   });
 };
 
-export const initMapbox = (center: [number, number], zoom: number) => {
+export const initMapbox = (
+  center: [number, number],
+  zoom: number,
+  selected: State['selected']['tree'],
+) => {
   map = new mapboxgl.Map({
     accessToken: process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string,
     container: 'map',
     style: 'mapbox://styles/mapbox/dark-v10',
     center,
     zoom,
+  });
+
+  map.on('load', () => {
+    map.addSource('hovered', {
+      type: 'geojson',
+      data: { type: 'FeatureCollection', features: [] },
+    });
+    map.addSource('selected', {
+      type: 'geojson',
+      data: selected || { type: 'FeatureCollection', features: [] },
+    });
   });
 };

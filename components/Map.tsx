@@ -12,6 +12,7 @@ const Map: React.FC<{
   filters: State['filters'];
   center: State['center'];
   zoom: State['zoom'];
+  selected: State['selected']['tree'];
   updateHover: (hovered: State['hovered']) => void;
   updateMap: (center: State['center'], zoom: State['zoom']) => void;
   updateSelected: (selected: State['selected']) => void;
@@ -20,12 +21,13 @@ const Map: React.FC<{
   filters,
   center,
   zoom,
+  selected,
   updateHover,
   updateMap,
   updateSelected,
 }) => {
   /* eslint-disable-next-line react-hooks/exhaustive-deps */
-  useEffect(() => initMapbox(center, zoom), []);
+  useEffect(() => initMapbox(center, zoom, selected), []);
 
   useEffect(() => {
     getMapbox().then(({ updateLayers }: MapboxAPI) => updateLayers(filters));
@@ -66,12 +68,9 @@ const Map: React.FC<{
           return;
         }
 
-        if (hoveredFeature) {
-          // @ts-ignore
-          if (newHovered.id === hoveredFeature.id) {
-            return;
-          }
-          source.setData({ type: 'FeatureCollection', features: [] });
+        // @ts-ignore
+        if (hoveredFeature && newHovered.id === hoveredFeature.id) {
+          return;
         }
 
         hoveredFeature = newHovered;
@@ -85,7 +84,7 @@ const Map: React.FC<{
 
   useEffect(() => {
     getMapbox().then(({ onEvent }: MapboxAPI) => {
-      let selectedFeature: State['selected']['tree'] = null;
+      let selectedFeature: State['selected']['tree'] = selected;
 
       onEvent('click', (evt) => {
         const {
@@ -136,10 +135,10 @@ const Map: React.FC<{
 
         source.setData(newSelected.tree);
 
-
         updateSelected(newSelected);
       });
     });
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [updateSelected]);
 
   useEffect(() => {

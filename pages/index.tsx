@@ -41,6 +41,7 @@ const Home: NextPage = () => {
         filters={state.filters}
         center={state.center}
         zoom={state.zoom}
+        selected={state.selected.tree}
         updateHover={updateHover}
         updateMap={updateMap}
         updateSelected={updateSelected}

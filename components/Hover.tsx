@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 import type { State } from '../reducer';
 import { PROPS, TREE_PROPS } from '../utils';
@@ -55,14 +55,14 @@ const Hover: React.FC<{
     >
       <dl className={styles.properties}>
         {TREE_PROPS.map((prop) => (
-          <>
+          <Fragment key={prop}>
             <dt>{PROPS[prop]}:</dt>
             <dd>
               {prop === 'date'
                 ? new Date(properties.date).toLocaleDateString()
                 : properties[prop]}
             </dd>
-          </>
+          </Fragment>
         ))}
       </dl>
     </section>

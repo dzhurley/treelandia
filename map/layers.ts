@@ -85,10 +85,7 @@ export const getLayer = (
     return {
       id,
       type,
-      source: {
-        type: 'geojson',
-        data: { type: 'FeatureCollection', features: [] },
-      },
+      source: id,
       paint: {
         'circle-color': 'green',
         'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 1, 20, 8],
