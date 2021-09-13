@@ -50,6 +50,8 @@ const Selected: React.FC<{
   block: State['selected']['block'];
   filters: State['filters'];
 }> = ({ tree, block, filters }) => {
+
+  // check if selected tree is visible on map based on filters
   const visible = useMemo(() => {
     if (!tree?.properties) {
       return false;
@@ -75,6 +77,7 @@ const Selected: React.FC<{
     });
   }, [tree, filters]);
 
+  // update map styles on visible status of selected tree
   useEffect(() => {
     getMapbox().then(({ setSelectedFiltered }: MapboxAPI) =>
       setSelectedFiltered(visible),

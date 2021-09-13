@@ -32,6 +32,8 @@ const Range: React.FC<{
 
   useEffect(() => {
     if (trackRef.current) {
+      // handle issue where SSR would not be able to render with localstorage
+      // values and react-range wouldn't update style with stored values
       trackRef.current.children[0].setAttribute(
         'style',
         `background:${background}`,

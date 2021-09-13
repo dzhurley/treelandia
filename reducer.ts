@@ -11,7 +11,7 @@ export type State = {
   zoom: number;
 };
 
-const STATE_KEY = 'treelandia-state';
+const LOCAL_STORAGE_STATE_KEY = 'treelandia-state';
 
 const initialState: State = {
   center: [-122.6, 45.5],
@@ -27,9 +27,12 @@ const initialState: State = {
   zoom: 11,
 };
 
+// pull from localstorage
 const getState = (): State | undefined => {
   try {
-    const storedState = window?.localStorage?.getItem?.(STATE_KEY);
+    const storedState = window?.localStorage?.getItem?.(
+      LOCAL_STORAGE_STATE_KEY,
+    );
     if (storedState) {
       return JSON.parse(storedState);
     }
@@ -38,9 +41,13 @@ const getState = (): State | undefined => {
   }
 };
 
+// set into localstorage
 const setState = (state: State) => {
   try {
-    window?.localStorage?.setItem?.(STATE_KEY, JSON.stringify(state));
+    window?.localStorage?.setItem?.(
+      LOCAL_STORAGE_STATE_KEY,
+      JSON.stringify(state),
+    );
   } catch (error) {}
 };
 
@@ -95,6 +102,7 @@ export const reducer = (state: State, action: Action) => {
       break;
   }
 
+  // update localstorage after each action
   setState(newState);
   return newState;
 };

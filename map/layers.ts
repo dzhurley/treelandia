@@ -1,5 +1,6 @@
 import type { FillLayer, CircleLayer } from 'mapbox-gl';
 
+// all custom layers
 export const layers: Record<
   string,
   { id: string; type: 'fill' | 'circle'; tileset?: string }
@@ -49,6 +50,7 @@ export const layers: Record<
   },
 };
 
+// all layers searchable with queryRenderedFeatures
 export const interactiveLayers = [
   'park-trees',
   'street-trees-0',
@@ -59,6 +61,7 @@ export const interactiveLayers = [
   'equity',
 ];
 
+// select correct style spec based on layer id
 export const getLayer = (
   id: string,
   type: 'fill' | 'circle',

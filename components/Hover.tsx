@@ -23,6 +23,7 @@ const Hover: React.FC<{
         if (withinRef) {
           setPosition({ top: evt.clientY + 5, left: evt.clientX + 5 });
         } else {
+          // handles case where mouse starts on map after refresh
           setWithinRef(true);
         }
       };
