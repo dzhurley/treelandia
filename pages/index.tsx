@@ -2,6 +2,7 @@ import { useCallback, useReducer, useRef } from 'react';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
+import About from '../components/About';
 import Filters from '../components/Filters';
 import Hover from '../components/Hover';
 import Map from '../components/Map';
@@ -56,6 +57,8 @@ const Home: NextPage = () => {
       />
 
       <Hover mapContainerRef={mapContainerRef} hovered={state.hovered} />
+
+      <About />
     </>
   );
 };
