@@ -159,7 +159,7 @@ const api: MapboxAPI = {
         streetCriteria.push(value);
       } else if ('park-trees' === name) {
         parkCriteria.push(value);
-      } else {
+      } else if ('outlines' !== name) {
         const sliderFilter: Expression[] = [
           ['has', name],
           ['>=', ['get', name], value[0]],
@@ -192,6 +192,15 @@ const api: MapboxAPI = {
     map.setFilter('street-trees-2', streetFilter);
     map.setFilter('street-trees-3', streetFilter);
     map.setFilter('street-trees-4', streetFilter);
+
+    // show/hide equity block outlines
+    if ('outlines' in filters) {
+      map.setLayoutProperty(
+        'equity',
+        'visibility',
+        filters.outlines ? 'visible' : 'none',
+      );
+    }
   },
 
   // styles selected tree in map differently based on filters

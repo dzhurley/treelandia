@@ -65,8 +65,7 @@ const Selected: React.FC<{
       if (!isStreet && 'park-trees' === name) {
         return value;
       }
-
-      if (name !== 'street-trees' && name !== 'park-trees') {
+      if (!['street-trees', 'park-trees', 'outlines'].includes(name)) {
         return (
           value[0] <= tree.properties?.[name] &&
           value[1] >= tree.properties?.[name]

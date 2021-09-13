@@ -114,6 +114,18 @@ const Filters: React.FC<{
         value={filters.tes}
         onChange={handleRange('tes')}
       />
+
+      <label className={styles.label}>
+        <input
+          className={styles.checkbox}
+          type="checkbox"
+          name="outlines"
+          checked={filters.outlines}
+          value="outlines"
+          onChange={handleCheckbox}
+        />
+        Show Block Outlines
+      </label>
     </section>
   );
 };

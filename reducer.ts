@@ -18,6 +18,7 @@ const initialState: State = {
   filters: {
     'street-trees': true,
     'park-trees': true,
+    outlines: true,
   },
   hovered: null,
   selected: {
