@@ -79,7 +79,7 @@ export const getLayer = (
       'source-layer': 'data-layer',
       paint: {
         'fill-color': 'rgba(0, 0, 0, 0)',
-        'fill-outline-color': 'white',
+        'fill-outline-color': 'rgba(255, 255, 255, 0.2)',
       },
     };
   }
