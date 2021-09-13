@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Range as ReactRange, getTrackBackground } from 'react-range';
 import { debounce } from 'lodash';
 
@@ -19,6 +19,26 @@ const Range: React.FC<{
   /* eslint-disable-next-line react-hooks/exhaustive-deps */
   const debouncedUpdate = useCallback(debounce(onChange, 500), [onChange]);
 
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const background = useMemo(() => {
+    return getTrackBackground({
+      values,
+      colors: ['#ccc', '#548BF4', '#ccc'],
+      min: min,
+      max: max,
+    });
+  }, [values, min, max]);
+
+  useEffect(() => {
+    if (trackRef.current) {
+      trackRef.current.children[0].setAttribute(
+        'style',
+        `background:${background}`,
+      );
+    }
+  }, [background]);
+
   return (
     <label className={styles.range}>
       {PROPS[name]}
@@ -33,24 +53,15 @@ const Range: React.FC<{
           debouncedUpdate(newValues);
         }}
         renderTrack={({ props, children }) => {
-          const background = getTrackBackground({
-            values,
-            colors: ['#ccc', '#548BF4', '#ccc'],
-            min: min,
-            max: max,
-          });
           return (
             <div
+              ref={trackRef}
               className={styles.trackContainer}
               onMouseDown={props.onMouseDown}
               onTouchStart={props.onTouchStart}
               style={props.style}
             >
-              <div
-                ref={props.ref}
-                className={styles.track}
-                style={{ background }}
-              >
+              <div ref={props.ref} className={styles.track}>
                 {children}
               </div>
             </div>
