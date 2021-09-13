@@ -22,6 +22,8 @@ const Hover: React.FC<{
       const onMove = (evt: MouseEvent) => {
         if (withinRef) {
           setPosition({ top: evt.clientY + 5, left: evt.clientX + 5 });
+        } else {
+          setWithinRef(true);
         }
       };
 
