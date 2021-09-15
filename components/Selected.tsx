@@ -50,7 +50,6 @@ const Selected: React.FC<{
   block: State['selected']['block'];
   filters: State['filters'];
 }> = ({ tree, block, filters }) => {
-
   // check if selected tree is visible on map based on filters
   const visible = useMemo(() => {
     if (!tree?.properties) {
@@ -120,7 +119,9 @@ const Selected: React.FC<{
           )}
         </>
       ) : (
-        'Tree has been filtered from view, please adjust filters to show tree again'
+        <span className={styles.empty}>
+          Tree has been filtered out, please adjust filters to show tree again
+        </span>
       )}
     </section>
   ) : null;

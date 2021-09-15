@@ -23,6 +23,7 @@
   padding: 0.25rem 0;
   margin-right: 2rem;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .checkbox {
