@@ -195,11 +195,7 @@ const api: MapboxAPI = {
 
     // show/hide equity block outlines
     if ('outlines' in filters) {
-      map.setLayoutProperty(
-        'equity',
-        'visibility',
-        filters.outlines ? 'visible' : 'none',
-      );
+      map.setPaintProperty('equity', 'fill-opacity', filters.outlines ? 1 : 0);
     }
   },
 
