@@ -14,7 +14,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #f0f0f0;
-  padding: 2rem;
+  padding: 0.5rem 2rem;
   border-radius: 0.5rem;
   max-width: 430px;
   line-height: 2;
