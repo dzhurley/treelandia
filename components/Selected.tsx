@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
+import Image from 'next/image';
 
-import { MapboxAPI, getMapbox } from '../map';
+import { MapboxAPI, getMapbox, getSelectedMapImage } from '../map';
 import type { State } from '../reducer';
 import {
   formatPropUnits,
@@ -83,10 +84,23 @@ const Selected: React.FC<{
     );
   }, [visible]);
 
+  const selectedImage = useMemo(() => {
+    return getSelectedMapImage(tree);
+  }, [tree]);
+
   return tree?.properties && block?.properties ? (
     <section className={styles.container}>
       {visible ? (
         <>
+          {selectedImage && (
+            <Image
+              src={selectedImage}
+              alt="selected tree location"
+              width={300}
+              height={200}
+            />
+          )}
+
           {tree?.properties && (
             <>
               <h3>Tree</h3>

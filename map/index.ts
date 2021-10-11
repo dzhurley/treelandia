@@ -8,6 +8,8 @@ import type {
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
+import type { Point } from 'geojson';
+
 import type { State } from '../reducer';
 
 import { interactiveLayers, layers, getLayer } from './layers';
@@ -270,4 +272,23 @@ export const initMapbox = (
       data: selected || { type: 'FeatureCollection', features: [] },
     });
   });
+};
+
+// use the Mapbox Static Image API for selected tree location
+// https://docs.mapbox.com/api/maps/static-images/
+export const getSelectedMapImage = (selected: State['selected']['tree']) => {
+  if (selected === null) {
+    return '';
+  }
+
+  const { id, geometry } = selected as { id: number; geometry: Point };
+  const [lng, lat] = geometry.coordinates;
+  const feature = JSON.stringify({
+    id,
+    geometry,
+    properties: {},
+    type: 'Feature',
+  });
+
+  return `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/static/geojson(${feature})/${lng},${lat},16.5,0/300x200@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`;
 };
