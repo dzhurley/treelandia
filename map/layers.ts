@@ -1,6 +1,9 @@
 import type { FillLayer, CircleLayer } from 'mapbox-gl';
 
 // all custom layers
+//
+// NOTE: `tileset` URLs correspond to specific uploaded tilesets, update with
+// real URLs after running `npm run tileset` and uploading to Mapbox if forking
 export const layers: Record<
   string,
   { id: string; type: 'fill' | 'circle'; tileset?: string }
