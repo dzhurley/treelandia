@@ -16,33 +16,29 @@ export const PROPS = {
   // total population of block group
   total_pop: 'Total Population',
   // percent of people in poverty inside block group
-  pctpov: 'People in Poverty (%)',
+  pctpov: 'People in Poverty',
   // percent of people of color inside block group
-  pctpoc: 'People of Color (%)',
+  pctpoc: 'People of Color',
   // unemployment rate inside of block group
-  unemplrate: 'Unemployment Rate (%)',
+  unemplrate: 'Unemployment Rate',
   // median household income of block group
-  medhhinc: 'Median Income ($)',
+  medhhinc: 'Median Income',
   // area of block group in square kilometers
-  area: 'Area (km²)',
+  area: 'Area',
   // average temperature of block group on a hot summer's day
-  avg_temp: 'Average Temperature (°F)',
+  avg_temp: 'Average Temperature',
   // density of block group (total population over area)
   bgpopdense: 'Population over Area',
   // self reported physical health challenges of people in block group (a percentage)
-  phys_hlth: 'Physical Health Issues (%)',
+  phys_hlth: 'Physical Health Issues',
   // self reported mental health challenges of people in block group (a percentage)
-  ment_hlth: 'Mental Health Issues (%)',
+  ment_hlth: 'Mental Health Issues',
   // self reported asthma challenges of people in block group (a percentage)
-  asthma: 'Asthma (%)',
+  asthma: 'Asthma',
   // self reported male coronary heart challenges of people in block group (a percentage)
-  core_m: 'Male Heart Issues (%)',
+  core_m: 'Male Heart Issues',
   // self reported female coronary heart challenges of people in block group (a percentage)
-  core_w: 'Female Heart Issues (%)',
-  // normalized total coronary challenges of people in block group
-  core_norm: 'Normalized Heart Issues (%)',
-  // normalized health index of block group
-  healthnorm: 'Health Index',
+  core_w: 'Female Heart Issues',
   // tree equity score of block group
   tes: 'Tree Equity Score',
 };
@@ -63,9 +59,7 @@ export const BLOCK_PROPS: Prop[] = [
   'avg_temp',
   'bgpopdense',
   'core_m',
-  'core_norm',
   'core_w',
-  'healthnorm',
   'medhhinc',
   'ment_hlth',
   'pctpoc',
@@ -88,9 +82,18 @@ const FLOAT_PROPS: Prop[] = [
   'asthma',
   'core_m',
   'core_w',
-  'core_norm',
-  'healthnorm',
   'tes',
+];
+
+const PERCENT_PROPS: Prop[] = [
+  'phys_hlth',
+  'ment_hlth',
+  'asthma',
+  'core_m',
+  'core_w',
+  'pctpov',
+  'pctpoc',
+  'unemplrate',
 ];
 
 export const isTreeProp = (name: Prop): boolean => {
@@ -103,4 +106,48 @@ export const isBlockProp = (name: Prop): boolean => {
 
 export const shouldRound = (name: Prop): boolean => {
   return FLOAT_PROPS.includes(name);
+};
+
+export const formatPropUnits = (name: Prop, value: string | number): string => {
+  if (PERCENT_PROPS.includes(name)) {
+    let numberValue = typeof value === 'string' ? parseFloat(value) : value;
+    if (
+      ['phys_hlth', 'ment_hlth', 'asthma', 'core_m', 'core_w'].includes(name)
+    ) {
+      // handle case where some percentage values are stored with 0 - 1 range
+      // and some are stored within 0 - 100 range
+      numberValue = numberValue / 100;
+    }
+    return new Intl.NumberFormat('en-US', {
+      style: 'percent',
+      maximumFractionDigits: 2,
+    }).format(numberValue);
+  }
+
+  if (name === 'medhhinc' && typeof value === 'number') {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      currencyDisplay: 'narrowSymbol',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
+  }
+
+  if (name === 'total_pop' || name === 'bgpopdense') {
+    let numberValue = typeof value === 'string' ? parseFloat(value) : value;
+    return new Intl.NumberFormat('en-US', {
+      style: 'decimal',
+    }).format(numberValue);
+  }
+
+  if (name === 'area') {
+    return `${value} km²`;
+  }
+
+  if (name === 'avg_temp') {
+    return `${value} °F`;
+  }
+
+  return `${value}`;
 };

@@ -3,6 +3,7 @@ import { useEffect, useMemo } from 'react';
 import { MapboxAPI, getMapbox } from '../map';
 import type { State } from '../reducer';
 import {
+  formatPropUnits,
   isTreeProp,
   isBlockProp,
   Prop,
@@ -40,7 +41,7 @@ const Property: React.FC<{
   return (
     <span>
       <dt>{PROPS[name]}</dt>
-      <dd>{renderedValue}</dd>
+      <dd>{formatPropUnits(name, renderedValue)}</dd>
     </span>
   );
 };

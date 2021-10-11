@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Range as ReactRange, getTrackBackground } from 'react-range';
 import { debounce } from 'lodash';
 
-import { Prop, PROPS } from '../utils';
+import { formatPropUnits, Prop, PROPS } from '../utils';
 
 import styles from './Range.module.css';
 
@@ -41,6 +41,19 @@ const Range: React.FC<{
     }
   }, [background]);
 
+  const formattedRange = useMemo(() => {
+    let start: string;
+    let end: string;
+    if (step < 1) {
+      start = formatPropUnits(name, values[0].toFixed(1));
+      end = formatPropUnits(name, values[1].toFixed(1));
+    } else {
+      start = formatPropUnits(name, values[0]);
+      end = formatPropUnits(name, values[1]);
+    }
+    return `${start} - ${end}`;
+  }, [name, step, values]);
+
   return (
     <label className={styles.range}>
       {PROPS[name]}
@@ -76,9 +89,7 @@ const Range: React.FC<{
       <output
         style={{ fontSize: '80%', textAlign: 'center', display: 'block' }}
       >
-        {step < 1
-          ? `${values[0].toFixed(1)} - ${values[1].toFixed(1)}`
-          : `${values[0]} - ${values[1]}`}{' '}
+        {formattedRange}
       </output>
     </label>
   );
