@@ -8,11 +8,6 @@ export const layers: Record<
   string,
   { id: string; type: 'fill' | 'circle'; tileset?: string }
 > = {
-  equity: {
-    id: 'equity',
-    type: 'fill',
-    tileset: 'mapbox://dzhurley.9ou30cpk',
-  },
   'park-trees': {
     id: 'park-trees',
     type: 'circle',
@@ -42,6 +37,11 @@ export const layers: Record<
     id: 'street-trees-4',
     type: 'circle',
     tileset: 'mapbox://dzhurley.20qajc2t',
+  },
+  equity: {
+    id: 'equity',
+    type: 'fill',
+    tileset: 'mapbox://dzhurley.9ou30cpk',
   },
   hovered: {
     id: 'hovered',
@@ -111,7 +111,15 @@ export const getLayer = (
     },
     'source-layer': 'data-layer',
     paint: {
-      'circle-color': 'green',
+      'circle-color': [
+        'interpolate',
+        ['linear'],
+        ['get', 'tes'],
+        0,
+        'red',
+        100,
+        'green',
+      ],
       'circle-radius': ['interpolate', ['linear'], ['zoom'], 12, 1, 20, 8],
     },
   };
