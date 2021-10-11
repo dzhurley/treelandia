@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "license": "MIT",
   "dependencies": {
     "@turf/boolean-point-in-polygon": "6.5.0",
     "@turf/helpers": "6.5.0",
