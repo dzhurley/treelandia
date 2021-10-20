@@ -5,6 +5,7 @@ import Head from 'next/head';
 import About from '../components/About';
 import Filters from '../components/Filters';
 import Hover from '../components/Hover';
+import Legend from '../components/Legend';
 import Map from '../components/Map';
 import Selected from '../components/Selected';
 
@@ -49,6 +50,8 @@ const Home: NextPage = () => {
       />
 
       <Filters filters={state.filters} updateFilter={updateFilter} />
+
+      <Legend />
 
       <About />
 

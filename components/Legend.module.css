@@ -1,0 +1,43 @@
+.container {
+  position: absolute;
+  top: 1rem;
+  left: calc(200px + 4rem);
+  width: 200px;
+
+  padding: 1rem;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 0px 10px 1px
+}
+
+
+.scale {
+  height: 1rem;
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  background: linear-gradient(to right, red, green);
+}
+
+.min,
+.units,
+.max {
+  position: absolute;
+  bottom: 0.6rem;
+  font-size: 0.8rem;
+}
+
+.min {
+  left: 1rem;
+}
+
+.units {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.max {
+  right: 1rem;
+}
